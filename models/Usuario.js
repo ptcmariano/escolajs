@@ -1,32 +1,16 @@
-var usuarios = [
-    {
-        id: 1,
-        usuario: 'admin',
-        senha: '1234'
-    },
-    {
-        id: 2,
-        usuario: 'usuario',
-        senha: 'abcd'
-    },
-];
+var sequelize = require('../config/sequelize').getSequelize(),
+    Usuario = sequelize.model('Usuario');
 
-exports.obterPorId = function(id, callback) {
-    for (var i = 0; i < usuarios.length; i++) {
-        if (id === usuarios[i].id) {
-            callback(null, usuarios[i]);
-            return;
-        }
-    }
-    callback(null, null);
+exports.obterPorId = function(id, cb) {
+    return Usuario.findById(id)
+        .then(function(usuario) {
+            cb(null, usuario);
+        });
 };
 
-exports.autenticar = function(usuario, senha, callback) {
-    for (var i = 0; i < usuarios.length; i++) {
-        if (usuario === usuarios[i].usuario && senha === usuarios[i].senha) {
-            callback(null, usuarios[i]);
-            return;
-        }
-    }
-    callback(null, null);
+exports.autenticar = function(nomeUsuario, senha, cb) {
+    return Usuario.findOne({nomeUsuario: nomeUsuario, senha: senha})
+        .then(function(usuario) {
+            cb(null, usuario);
+        });
 };

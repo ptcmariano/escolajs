@@ -16,6 +16,8 @@
     "morgan": "~1.6.1",
     "passport": "^0.3.0",
     "passport-local": "^1.0.0",
-    "serve-favicon": "~2.3.0"
+    "sequelize": "^3.7.1",
+    "serve-favicon": "~2.3.0",
+    "sqlite3": "^3.0.10"
   }
 }

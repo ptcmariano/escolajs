@@ -9,6 +9,7 @@ module.exports = function(passport) {
         usernameField: 'usuario',
         passwordField: 'senha'
     }, function(nomeUsuario, senha, done) {
+
         Usuario.autenticar(nomeUsuario, senha, function(err, usuario) {
             if (usuario === null) {
                 done(null, false, {message: 'Usuário ou Senha incorretos!'});
