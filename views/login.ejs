@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<% if (messages.length > 0) { %>
+<div>
+    <ul>
+        <% for (var i in messages) { %>
+        <li><%= messages[i] %></li>
+        <% } %>
+    </ul>
+</div>
+<% } %>
+<form action="/login" method="post">
+    <div>
+        <label for="usuario">Usuário:</label>
+        <input type="text" name="usuario"/>
+    </div>
+
+    <div>
+        <label for="senha">Senha:</label>
+        <input type="password" name="senha"/>
+    </div>
+
+    <div>
+        <input type="submit" value="Fazer Login"/>
+    </div>
+</form>
+</body>
+</html>
