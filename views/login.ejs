@@ -2,32 +2,43 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="/css/horario.css"/>
 </head>
-<body>
-<% if (messages.length > 0) { %>
-<div>
-    <ul>
-        <% for (var i in messages) { %>
-        <li><%= messages[i] %></li>
+<body class="paginaLogin">
+
+<div class="container">
+    <form action="/login" method="post" class="formLogin">
+        <h2>Login</h2>
+
+        <% if (messages.length > 0) { %>
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+            <% for (var i in messages) { %>
+                <span><%= messages[i] %></span>
+            <% } %>
+        </div>
         <% } %>
-    </ul>
+
+        <div>
+            <label for="usuario" class="sr-only">Usuário</label>
+            <input type="text" name="usuario" placeholder="Usuário" class="form-control"/>
+        </div>
+
+        <div>
+            <label for="senha" class="sr-only">Senha:</label>
+            <input type="password" name="senha" placeholder="Senha" class="form-control"/>
+        </div>
+
+        <input type="submit" value="Fazer Login" class="btn btn-lg btn-primary btn-block"/>
+    </form>
 </div>
-<% } %>
-<form action="/login" method="post">
-    <div>
-        <label for="usuario">Usuário:</label>
-        <input type="text" name="usuario"/>
-    </div>
 
-    <div>
-        <label for="senha">Senha:</label>
-        <input type="password" name="senha"/>
-    </div>
-
-    <div>
-        <input type="submit" value="Fazer Login"/>
-    </div>
-</form>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </body>
 </html>
