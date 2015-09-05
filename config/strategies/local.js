@@ -10,12 +10,13 @@ module.exports = function(passport) {
         passwordField: 'senha'
     }, function(nomeUsuario, senha, done) {
 
-        Usuario.autenticar(nomeUsuario, senha, function(err, usuario) {
-            if (usuario === null) {
-                done(null, false, {message: 'Usuário ou Senha incorretos!'});
-            } else {
-                done(null, usuario);
-            }
-        });
+        Usuario.autenticar(nomeUsuario, senha)
+            .then(function(usuario) {
+                if (usuario == null) {
+                    done(null, false, {message: 'Usuário ou Senha incorretos!'});
+                } else {
+                    done(null, usuario);
+                }
+            });
     }));
-}
+};

@@ -1,16 +1,17 @@
 var sequelize = require('../config/sequelize').getSequelize(),
     Usuario = sequelize.model('Usuario');
 
-exports.obterPorId = function(id, cb) {
-    return Usuario.findById(id)
-        .then(function(usuario) {
-            cb(null, usuario);
-        });
+exports.obterPorId = function(id) {
+    return Usuario.findById(id);
 };
 
-exports.autenticar = function(nomeUsuario, senha, cb) {
-    return Usuario.findOne({nomeUsuario: nomeUsuario, senha: senha})
-        .then(function(usuario) {
-            cb(null, usuario);
+exports.autenticar = function(nomeUsuario, senha) {
+    return Usuario.findOne({where: {nomeUsuario: nomeUsuario, senha: senha}});
+};
+
+exports.novoUsuario = function(dados) {
+    return Usuario.create(dados,
+        {
+            fields: ['nomeUsuario', 'senha']
         });
 };

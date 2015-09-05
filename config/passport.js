@@ -18,10 +18,12 @@ function configurarSessao(passport) {
     });
 
     passport.deserializeUser(function(id, done) {
-        Usuario.obterPorId(id, function(err, usuario) {
-            done(err, usuario);
+        Usuario.obterPorId(id)
+            .then(function(usuario) {
+                done(null, usuario);
+            })
+            .catch(done);
         });
-    });
 }
 
 function configurarAutenticacaoLocal(passport) {
