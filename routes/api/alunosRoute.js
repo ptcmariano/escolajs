@@ -8,7 +8,9 @@ router.route('/')
     .get(alunosCtrl.listarAlunos)
     .post(alunosCtrl.novoAluno);
 
-router.route('/:id')
+router.param('idAluno', alunosCtrl.obterAlunoMiddleware);
+
+router.route('/:idAluno')
     .get(alunosCtrl.exibirAluno)
     .put(alunosCtrl.editarAluno)
     .delete(alunosCtrl.excluirAluno);
