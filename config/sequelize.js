@@ -12,6 +12,7 @@ module.exports.getSequelize = function() {
 
 function configureModels(sequelize) {
     require('./models/db.Usuario')(sequelize);
+    require('./models/db.Aluno')(sequelize);
 }
 
 function createConnection() {
