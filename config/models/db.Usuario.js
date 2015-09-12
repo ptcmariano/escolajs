@@ -1,6 +1,7 @@
+/// </// <reference path="../../typings/tsd.d.ts" />
 var Sequelize = require('sequelize');
 
-module.exports = function(sequelize) {
+module.exports = function (sequelize) {
     return sequelize.define('Usuario', {
         nomeUsuario: {
             type: Sequelize.TEXT,

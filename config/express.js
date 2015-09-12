@@ -12,7 +12,7 @@ var flash = require('connect-flash');
 
 module.exports = function() {
     var app = express();
-
+        
     configurarTemplates(app);
     adicionarMiddlewares(app);
     definirRotasDaAplicacao(app);
