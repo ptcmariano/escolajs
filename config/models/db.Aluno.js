@@ -1,5 +1,7 @@
 var Sequelize = require('sequelize');
 module.exports = function(sequelize) {
+    
+    
     return sequelize.define('Aluno', {
         prontuario: {
             type: sequelize.STRING(15),
