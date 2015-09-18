@@ -1,6 +1,7 @@
 var Sequelize = require('sequelize');
+
 module.exports = function(sequelize) {
-    return sequelize.define('Aluno', {
+    return sequelize.define('Professor', {
         prontuario: {
             type: Sequelize.STRING(15),
             allowNull: false,
@@ -8,14 +9,14 @@ module.exports = function(sequelize) {
         },
         nome: {
             type: Sequelize.STRING(100),
-            allowNull: false            
+            allowNull: false
         },
         sobrenome: {
             type: Sequelize.STRING(100),
-            allowNull: false            
+            allowNull: false
         },
         email: {
-            type: sequelize.STRING(150),
+            type: Sequelize.STRING(150),
             allowNull: false
         }
     }, {
