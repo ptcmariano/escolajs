@@ -11,5 +11,7 @@ module.exports = function(sequelize) {
             type: Sequelize.TEXT,
             allowNull: false
         },
+    }, {
+        freezeTableName: true
     });
 };
