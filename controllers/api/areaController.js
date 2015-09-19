@@ -1,5 +1,5 @@
 /**
- * Created by renanluc on 18/09/15.
+ * Created by renan on 18/09/15.
  */
 var Area = require('../../models/Area');
 
