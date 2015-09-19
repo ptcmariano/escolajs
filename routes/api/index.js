@@ -6,4 +6,6 @@ router.use('/professores', require('./professoresRoute'));
 router.use('/turmas', require('./turmasRoute'));
 router.use('/cursos', require('./cursosRoute'));
 
+router.use(require('../../components/apiErrorParser').sequelizeError);
+
 module.exports = router;
