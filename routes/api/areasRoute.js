@@ -4,7 +4,7 @@ var areasCtrl = require('../../controllers/api/areasController');
 router.route('/')
     .get(areasCtrl.listarAreas)
     .post(areasCtrl.novaArea);
-
+//teste
 router.param('idArea', areasCtrl.obterAreaMiddleware);
 
 router.route('/:idArea')
