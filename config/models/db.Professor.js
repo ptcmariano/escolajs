@@ -5,19 +5,34 @@ module.exports = function(sequelize) {
         prontuario: {
             type: Sequelize.STRING(15),
             allowNull: false,
-            unique: true
+            unique: true,
+            validate: { 
+                is: /d{5}-\d{1}/
+            }
         },
         nome: {
             type: Sequelize.STRING(100),
-            allowNull: false
+            allowNull: false,
+            validate: { 
+                isAlpha: true,
+                len: [2,100]
+            }
         },
         sobrenome: {
             type: Sequelize.STRING(100),
-            allowNull: false
+            allowNull: false,
+            validate: { 
+                isAlpha: true,
+                len: [2,100]             
+            }
         },
         email: {
             type: Sequelize.STRING(150),
-            allowNull: false
+            allowNull: false,
+            validate: { 
+                isEmail: true,
+                len: [0,150]  
+            }
         }
     }, {
         freezeTableName: true
