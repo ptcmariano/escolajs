@@ -40,7 +40,8 @@ function configureModels(sequelize) {
 
 function createConnection() {
     return new Sequelize(getDbUrl(), {
-        dialect: 'sqlite'
+        dialect: 'sqlite',
+        logging: function() {}
     });
 }
 
