@@ -2,7 +2,7 @@
  * Created by edupsousa on 03/09/15.
  */
 var Aluno = require('../../models/Aluno');
-var RestController = require('../../components/RestCrudController');
+var RestController = require('../../components/ControladorRest');
 var controller = new RestController(Aluno);
 
 exports.novoAluno = controller.novaInstancia;

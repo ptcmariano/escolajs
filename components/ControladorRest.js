@@ -1,48 +1,48 @@
 module.exports = (function() {
-    var modelo;
+    var Modelo;
 
-    function Controller(_modelo) {
-        modelo = _modelo;
+    function Controlador(_Modelo) {
+        Modelo = _Modelo;
     }
 
-    Controller.prototype.novaInstancia = function(req, res, next) {
-        return modelo.novaInstancia(req.body)
+    Controlador.prototype.novaInstancia = function(req, res, next) {
+        return Modelo.novaInstancia(req.body)
             .then(function(instancia) {
                 res.json(instancia);
             })
             .catch(next);
     };
 
-    Controller.prototype.exibirInstancia = function(req, res) {
+    Controlador.prototype.exibirInstancia = function(req, res) {
         res.json(req.instanciaModelo);
     };
 
-    Controller.prototype.editarInstancia = function(req, res, next) {
-        modelo.salvarAlteracoes(req.instanciaModelo, req.body)
+    Controlador.prototype.editarInstancia = function(req, res, next) {
+        req.instanciaModelo.salvarAlteracoes(req.body)
             .then(function() {
                 res.json(req.instanciaModelo);
             })
             .catch(next);
     };
 
-    Controller.prototype.excluirInstancia = function(req, res, next) {
-        modelo.excluirInstancia(req.instanciaModelo)
+    Controlador.prototype.excluirInstancia = function(req, res, next) {
+        req.instanciaModelo.excluirInstancia()
             .then(function() {
                 res.json(true);
             })
             .catch(next);
     };
 
-    Controller.prototype.listarInstancias = function(req, res, next) {
-        modelo.listarInstancias()
+    Controlador.prototype.listarInstancias = function(req, res, next) {
+        Modelo.listarInstancias()
             .then(function(instancias) {
                 res.json(instancias);
             })
             .catch(next);
     };
 
-    Controller.prototype.carregarInstanciaPorId = function(req, res, next, id) {
-        modelo.obterPorId(id)
+    Controlador.prototype.carregarInstanciaPorId = function(req, res, next, id) {
+        Modelo.obterPorId(id)
             .then(function(instancia) {
                 if (instancia === null) {
                     var err = new Error('Not Found');
@@ -56,5 +56,5 @@ module.exports = (function() {
             .catch(next);
     };
 
-    return Controller;
+    return Controlador;
 })();

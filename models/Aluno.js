@@ -1,25 +1,6 @@
 var sequelize = require('../config/sequelize').getSequelize(),
-    Aluno = sequelize.model('Aluno');
+    Aluno = require('../components/ModeloBase')(sequelize.model('Aluno'));
 
-exports.obterPorId = function(id) {
-    return Aluno.findById(id);
-};
+Aluno.definirCamposAtualizaveis(['prontuario', 'nome', 'sobrenome', 'email']);
 
-exports.novaInstancia = function(dados) {
-    return Aluno.create(dados,
-        {
-            fields: ['prontuario', 'nome', 'sobrenome', 'email']
-        });
-};
-
-exports.salvarAlteracoes = function(aluno, alteracoes) {
-    return aluno.updateAttributes(alteracoes);
-};
-
-exports.excluirInstancia = function(aluno) {
-    return aluno.destroy();
-};
-
-exports.listarInstancias = function() {
-    return Aluno.findAll();
-};
+module.exports = Aluno;
