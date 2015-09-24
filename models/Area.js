@@ -1,25 +1,6 @@
 var sequelize = require('../config/sequelize').getSequelize(),
-    Area = sequelize.model('Area');
+    Area = require('../components/ModeloBase')(sequelize.model('Area'));
 
-exports.obterPorId = function(id) {
-    return Area.findById(id);
-};
+Area.definirCamposAtualizaveis(['area']);
 
-exports.novaArea = function(dados) {
-    return Area.create(dados,
-        {
-            fields: ['area']
-        });
-};
-
-exports.salvarAlteracoes = function(area, alteracoes) {
-    return area.updateAttributes(alteracoes);
-};
-
-exports.excluirArea = function(area) {
-    return area.destroy();
-};
-
-exports.listarArea = function() {
-    return Area.findAll();
-};
+module.exports = Area;

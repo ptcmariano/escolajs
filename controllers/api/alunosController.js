@@ -1,13 +1,10 @@
-/**
- * Created by edupsousa on 03/09/15.
- */
 var Aluno = require('../../models/Aluno');
-var RestController = require('../../components/ControladorRest');
-var controller = new RestController(Aluno);
+var ControladorRest = new require('../../components/ControladorRest'),
+    controller = new ControladorRest(Aluno);
 
-exports.novoAluno = controller.novaInstancia;
-exports.exibirAluno = controller.exibirInstancia;
-exports.editarAluno = controller.editarInstancia;
-exports.excluirAluno = controller.excluirInstancia;
-exports.listarAlunos = controller.listarInstancias;
-exports.obterAlunoMiddleware = controller.carregarInstanciaPorId;
+exports.novoAluno = controller.novaInstancia.bind(controller);
+exports.exibirAluno = controller.exibirInstancia.bind(controller);
+exports.editarAluno = controller.editarInstancia.bind(controller);
+exports.excluirAluno = controller.excluirInstancia.bind(controller);
+exports.listarAlunos = controller.listarInstancias.bind(controller);
+exports.obterAlunoMiddleware = controller.carregarInstanciaPorId.bind(controller);

@@ -1,25 +1,6 @@
 var sequelize = require('../config/sequelize').getSequelize(),
-    Disciplina = sequelize.model('Disciplina');
+    Disciplina = require('../components/ModeloBase')(sequelize.model('Disciplina'));
 
-exports.obterPorId = function(id) {
-    return Disciplina.findById(id);
-};
+Disciplina.definirCamposAtualizaveis(['disciplina', 'sigla']);
 
-exports.novaDisciplina = function(dados) {
-    return Disciplina.create(dados,
-        {
-            fields: ['disciplina', 'sigla']
-        });
-};
-
-exports.salvarAlteracoes = function(disciplina, alteracoes) {
-    return disciplina.updateAttributes(alteracoes);
-};
-
-exports.excluirDisciplina = function(disciplina) {
-    return disciplina.destroy();
-};
-
-exports.listarDisciplinas = function() {
-    return Disciplina.findAll();
-};
+module.exports = Disciplina;
