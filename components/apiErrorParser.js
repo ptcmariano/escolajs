@@ -11,9 +11,10 @@ exports.sequelizeError = function(err, req, res, next) {
 		erros.push({
 			campo: erro.path,
 			tipo: erro.type,
-			valor: erro.value
+			mensagem: erro.value
 		})
 	})	
 	error.erros = erros;
+	res.status(400);
 	res.json(error);		
 }

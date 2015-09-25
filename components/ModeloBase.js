@@ -47,5 +47,9 @@ module.exports = function(DbModel) {
             });
     };
 
+    Modelo.truncar = function() {
+        return DbModel.destroy({truncate: true});
+    };
+
     return Modelo;
 };
