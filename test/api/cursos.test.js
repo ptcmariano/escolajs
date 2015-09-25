@@ -34,7 +34,6 @@ describe('/api/cursos', function() {
         it('Salvar novo curso e retornar instância salva.', function(done) {
             apiUtil.criarJsonPost('/api/cursos', novoCurso, 200)
                 .expect(function(res) {
-                    console.log(res.body);
                     var cursoInserido = res.body;
                     expect(cursoInserido)
                         .to.be.an('object');

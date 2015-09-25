@@ -6,6 +6,7 @@ gulp.task('default', function() {
 });
 
 gulp.task('test-api', function() {
+    process.env.NODE_ENV = 'test';
     global.express = require('./app');
     global.expect = require('chai').expect;
     global.request = require('supertest');
