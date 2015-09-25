@@ -24,18 +24,18 @@ function configureModels(sequelize) {
         AtribuicaoDisciplina = require('./models/db.AtribuicaoDisciplina')(sequelize),
         Professor = require('./models/db.Professor')(sequelize);
 
-    Curso.belongsTo(Area);
-    Disciplina.belongsTo(Curso);
-    Turma.belongsTo(Curso);
-    DisciplinaOfertada.belongsTo(Turma);
-    DisciplinaOfertada.belongsTo(Disciplina);
-    MatriculaDisciplina.belongsTo(DisciplinaOfertada);
-    MatriculaDisciplina.belongsTo(Aluno);
-    ListaPresenca.belongsTo(MatriculaDisciplina);
-    ListaPresenca.belongsTo(AulaMinistrada);
-    AulaMinistrada.belongsTo(DisciplinaOfertada);
-    AtribuicaoDisciplina.belongsTo(DisciplinaOfertada);
-    AtribuicaoDisciplina.belongsTo(Professor);
+    Curso.belongsTo(Area, {foreignKey: 'areaId'});
+    Disciplina.belongsTo(Curso, {foreignKey: 'cursoId'});
+    Turma.belongsTo(Curso, {foreignKey: 'cursoId'});
+    DisciplinaOfertada.belongsTo(Turma, {foreignKey: 'turmaId'});
+    DisciplinaOfertada.belongsTo(Disciplina, {foreignKey: 'disciplinaId'});
+    MatriculaDisciplina.belongsTo(DisciplinaOfertada, {foreignKey: 'disciplinaOfertadaId'});
+    MatriculaDisciplina.belongsTo(Aluno, {foreignKey: 'alunoId'});
+    ListaPresenca.belongsTo(MatriculaDisciplina, {foreignKey: 'matriculaDisciplinaId'});
+    ListaPresenca.belongsTo(AulaMinistrada, {foreignKey: 'aulaMinistradaId'});
+    AulaMinistrada.belongsTo(DisciplinaOfertada, {foreignKey: 'disciplinaOfertadaId'});
+    AtribuicaoDisciplina.belongsTo(DisciplinaOfertada, {foreignKey: 'disciplinaOfertadaId'});
+    AtribuicaoDisciplina.belongsTo(Professor, {foreignKey: 'professorId'});
 }
 
 function createConnection() {
