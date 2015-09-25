@@ -17,6 +17,14 @@ module.exports = function(DbModel) {
         return this.dbInstancia.toJSON();
     };
 
+    Instancia.prototype.get = function(campo) {
+        return this.dbInstancia.get(campo);
+    };
+
+    Instancia.prototype.set = function(campo, valor) {
+        return this.dbInstancia.set(campo, valor);
+    };
+
     var Modelo = {};
 
     Modelo.criarInstancia = function(dbInstancia) {
@@ -49,6 +57,10 @@ module.exports = function(DbModel) {
 
     Modelo.truncar = function() {
         return DbModel.destroy({truncate: true});
+    };
+
+    Modelo.estenderInstancia = function(nome, metodo) {
+        Instancia.prototype[nome] = metodo;
     };
 
     return Modelo;
