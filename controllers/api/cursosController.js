@@ -9,9 +9,11 @@ exports.listarCursos = controller.listarInstancias.bind(controller);
 exports.obterCursoMiddleware = controller.carregarInstanciaPorId.bind(controller);
 
 exports.novoCurso = function(req, res, next) {
+    var areaId = req.body.areaId;
+
     return Curso.novaInstancia(req.body)
         .then(function(curso) {
-            return curso.setArea(req.body.area);
+            return curso.setArea(areaId);
         })
         .then(function(curso) {
             res.json(curso);
