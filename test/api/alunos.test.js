@@ -15,81 +15,93 @@ function verificarAlunoValido(res) {
         .and.to.have.all.keys(['id', 'prontuario', 'nome', 'sobrenome', 'email', 'createdAt', 'updatedAt']);
 }
 
-describe('/api/alunos', function () {
+describe('API Alunos', function () {
     var dadosAluno;
 
     beforeEach(function (done) {
-        dadosAluno = criarObjetoAluno();
         Aluno.truncar()
-            .then(function () {
-                done();
-            }).catch(done);
+            .finally(done);
     });
 
-    context('Novo Aluno', function () {
-        it('Salvar aluno e retornar instância salva.',
-            function (done) {
-                apiUtil.criarJsonPost('/api/alunos', dadosAluno, 200)
-                    .expect(verificarAlunoValido)
-                    .end(done);
-            }
-        );
+    describe('Métodos CRUD', function() {
+        it('Novo Aluno', function(done) {
+            request(express)
+                .post('/api/alunos')
+                .send(criarObjetoAluno())
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .expect(verificarAlunoValido)
+                .end(done);
+        });
 
-        it('Retornar erro de validação quando o prontuário possuir um formato incorreto.',
-            function (done) {
-                dadosAluno.prontuario = '12345678';
+        it('Exibir Aluno', function(done) {
+            Aluno.novaInstancia(criarObjetoAluno())
+                .then(function(aluno) {
+                    request(express)
+                        .get('/api/alunos/' + aluno.get('id'))
+                        .set('Accept', 'application/json')
+                        .expect('Content-Type', /json/)
+                        .expect(200)
+                        .expect(verificarAlunoValido)
+                        .end(done)
+                })
+                .catch(done);
+        });
 
-                apiUtil.criarJsonPost('/api/alunos', dadosAluno, 400)
-                    .expect(apiUtil.verificarErroApi('ErroValidacao'))
-                    .end(done);
-            }
-        );
+        it('Editar Aluno', function(done) {
+            Aluno.novaInstancia(criarObjetoAluno())
+                .then(function(aluno) {
+                    request(express)
+                        .put('/api/alunos/' + aluno.get('id'))
+                        .send({email: 'outro@foo.bar'})
+                        .set('Accept', 'application/json')
+                        .expect('Content-Type', /json/)
+                        .expect(200)
+                        .expect(verificarAlunoValido)
+                        .expect(function(res) {
+                            expect(res.body.email)
+                                .to.be.equal('outro@foo.bar');
+                        })
+                        .end(done)
+                })
+                .catch(done);
+        });
 
-        it('Retornar erro de chave quando o prontuário for duplicado.',
-            function (done) {
+        it('Excluir Aluno', function(done) {
+            Aluno.novaInstancia(criarObjetoAluno())
+                .then(function(aluno) {
+                    request(express)
+                        .delete('/api/alunos/' + aluno.get('id'))
+                        .set('Accept', 'application/json')
+                        .expect('Content-Type', /json/)
+                        .expect(200)
+                        .expect(function(res) {
+                            expect(res.body)
+                                .to.be.true;
+                        })
+                        .end(done)
+                })
+                .catch(done);
+        });
 
-                apiUtil.criarJsonPost('/api/alunos', dadosAluno, 200)
-                    .end(function (err, res) {
-                    expect(err).to.be.equals(null);
-                    apiUtil.criarJsonPost('/api/alunos', dadosAluno, 400)
-                        .expect(apiUtil.verificarErroApi('ErroChaveUnica'))
-                        .end(done);
-                });
-            }
-        );
-
-        it('Retornar erro de validação quando os campos não nulos não forem enviados.',
-            function (done) {
-                var alunoEmBranco = {};
-
-                apiUtil.criarJsonPost('/api/alunos', alunoEmBranco, 400)
-                    .expect(apiUtil.verificarErroApi('ErroValidacao', 4))
-                    .end(done);
-            }
-        );
-
-        it('Retornar erro de validação quando o nome ou sobrenome forem muito pequenos.',
-            function (done) {
-                dadosAluno.nome = 'Jo';
-                dadosAluno.sobrenome = 'da';
-
-                apiUtil.criarJsonPost('/api/alunos', dadosAluno, 400)
-                    .expect(apiUtil.verificarErroApi('ErroValidacao', 2))
-                    .end(done);
-            }
-        );
-
-        it('Retornar erro de validação quando o e-mail possuir um formato incorreto.',
-            function (done) {
-                dadosAluno.email = 'joaodasilva@foo';
-
-                apiUtil.criarJsonPost('/api/alunos', dadosAluno, 400)
-                    .expect(apiUtil.verificarErroApi('ErroValidacao', 1))
-                    .end(done);
-            }
-        );
-
+        it('Listar Alunos', function(done) {
+            Aluno.novaInstancia(criarObjetoAluno())
+                .then(function(aluno) {
+                    request(express)
+                        .get('/api/alunos')
+                        .set('Accept', 'application/json')
+                        .expect('Content-Type', /json/)
+                        .expect(200)
+                        .expect(function(res) {
+                            expect(res.body)
+                                .to.be.an('array')
+                                .and.have.length(1);
+                        })
+                        .end(done)
+                })
+                .catch(done);
+        });
     });
-
 
 });
