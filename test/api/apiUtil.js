@@ -1,11 +1,23 @@
 
-exports.criarJsonPost = function(url, dataToSend, statusExpected) {
+exports.criarJsonPost = function(url, dataToSend, statusExpected, resCallback) {
     return request(express).post(url)
         .send(dataToSend)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(statusExpected);
+        .expect(statusExpected);        
 };
+
+exports.verificaErroCampo = function(nomeCampo) {
+    return function(res) {
+        expect(res.body)
+            .to.be.an('object')
+            .to.contain.all.keys(['nome', 'erros'])
+            .and.to.have.property('erros')
+            .that.is.an('array')
+            .with.deep.property('[0]')
+            .that.deep.equals({campo: nomeCampo})            
+    }
+}
 
 exports.verificarErroApi = function(nomeErro, qtdErros) {
     return function(res) {
