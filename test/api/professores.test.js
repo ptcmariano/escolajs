@@ -22,7 +22,15 @@ describe('API Professores', function () {
             .finally(done);
     });
     
-    
+    describe('Validações Professor', function(){
+       it('Prontuário errado', function(done){
+           var professorErrado = criarObjetoProfessor();
+           professorErrado.prontuario = 'errado';
+           apiUtil.criarJsonPost('/api/professores',professorErrado,400)
+            .expect(apiUtil.verificaErroCampo('prontuario'))
+            .end(done);
+       }); 
+    });
     
     describe('Métodos CRUD', function() {
         it('Novo Professor', function(done) {

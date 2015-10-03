@@ -12,10 +12,11 @@ exports.verificaErroCampo = function(nomeCampo) {
         expect(res.body)
             .to.be.an('object')
             .to.contain.all.keys(['nome', 'erros'])
-            .and.to.have.property('erros')
+            .and.to.contains.property('erros')
             .that.is.an('array')
             .with.deep.property('[0]')
-            .that.deep.equals({campo: nomeCampo})            
+            .that.contains.property('campo')
+            .that.is.equal(nomeCampo);           
     }
 }
 
