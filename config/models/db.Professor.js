@@ -6,32 +6,40 @@ module.exports = function(sequelize) {
             type: Sequelize.STRING(15),
             allowNull: false,
             unique: true,
-            validate: { 
-                is: /d{5}-\d{1}/
+           validate: {
+                is: {
+                    args: [/^\d{6}\-\d{1}$/],
+                    msg: 'O prontuário possui um formato inválido.'
+                }
             }
         },
         nome: {
             type: Sequelize.STRING(100),
             allowNull: false,
-            validate: { 
-                isAlpha: true,
-                len: [2,100]
+           validate: {
+                len: {
+                    args: [3,100],
+                    msg: 'O Nome deve possuir entre 3 e 100 caracteres.'
+                }
             }
         },
         sobrenome: {
             type: Sequelize.STRING(100),
             allowNull: false,
-            validate: { 
-                isAlpha: true,
-                len: [2,100]             
+            validate: {
+                len: {
+                    args: [3,100],
+                    msg: 'O Sobrenome deve possuir entre 3 e 100 caracteres.'
+                }
             }
         },
         email: {
             type: Sequelize.STRING(150),
             allowNull: false,
-            validate: { 
-                isEmail: true,
-                len: [0,150]  
+            validate: {
+                isEmail: {
+                    msg: 'O E-Mail informado não é válido.'
+                }
             }
         }
     }, {
