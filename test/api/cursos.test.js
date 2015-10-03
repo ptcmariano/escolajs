@@ -1,51 +1,105 @@
-var Curso = require('../../models/Curso'),
-    Area = require('../../models/Area');
+var Curso = require('../../models/Curso');
 
-describe('/api/cursos', function() {
-    var area;
+function criarObjetoCurso() {
+    return {
+        curso: 'Português',
+        sigla: 'PT'
+    };
+}
 
-    before(function(done) {
-        return Area.truncar()
-            .then(function() {
-                return Area.novaInstancia({area: 'Área Teste'});
-            })
-            .then(function(areaInserida) {
-                area = areaInserida;
-            })
+function verificarCursoValido(res) {
+    expect(res.body)
+        .to.be.an('object')
+        .and.to.have.all.keys(['id', 'curso', 'sigla','createdAt', 'updatedAt','areaId']);
+}
+
+describe('API Cursos', function () {
+    var dadosCurso;
+
+    beforeEach(function (done) {
+        Curso.truncar()
             .finally(done);
     });
 
-    beforeEach(function(done) {
-        Curso.truncar()
-            .finally(done)
-    });
-
-    context('Novo Curso', function() {
-        var novoCurso;
-
-        beforeEach(function() {
-            novoCurso = {
-                sigla: 'SGL',
-                curso: 'Curso Teste',
-                areaId: area.get('id')
-            };
-        });
-
-        it('Salvar novo curso e retornar instância salva.', function(done) {
-            apiUtil.criarJsonPost('/api/cursos', novoCurso, 200)
-                .expect(function(res) {
-                    var cursoInserido = res.body;
-                    expect(cursoInserido)
-                        .to.be.an('object');
-                    expect(cursoInserido)
-                        .to.have.all.keys(['id','sigla','curso','areaId','createdAt','updatedAt']);
-                    expect(cursoInserido.sigla).to.be.equal(novoCurso.sigla);
-                    expect(cursoInserido.curso).to.be.equal(novoCurso.curso);
-                    expect(cursoInserido.areaId).to.be.equal(novoCurso.areaId);
-                })
+    describe('Métodos CRUD', function() {
+        it('Novo Curso', function(done) {
+            request(express)
+                .post('/api/cursos')
+                .send(criarObjetoCurso())
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .expect(verificarCursoValido)
                 .end(done);
         });
 
+        it('Exibir Curso', function(done) {
+            Curso.novaInstancia(criarObjetoCurso())
+                .then(function(curso) {
+                    request(express)
+                        .get('/api/cursos/' + curso.get('id'))
+                        .set('Accept', 'application/json')
+                        .expect('Content-Type', /json/)
+                        .expect(200)
+                        .expect(verificarCursoValido)
+                        .end(done)
+                })
+                .catch(done);
+        });
+
+        it('Editar Curso', function(done) {
+            Curso.novaInstancia(criarObjetoCurso())
+                .then(function(curso) {
+                    request(express)
+                        .put('/api/cursos/' + curso.get('id'))
+                        .send({curso: 'Matematica'})
+                        .set('Accept', 'application/json')
+                        .expect('Content-Type', /json/)
+                        .expect(200)
+                        .expect(verificarCursoValido)
+                        .expect(function(res) {
+                            expect(res.body.curso)
+                                .to.be.equal('Matematica');
+                        })
+                        .end(done)
+                })
+                .catch(done);
+        });
+
+        it('Excluir Curso', function(done) {
+            Curso.novaInstancia(criarObjetoCurso())
+                .then(function(curso) {
+                    request(express)
+                        .delete('/api/cursos/' + curso.get('id'))
+                        .set('Accept', 'application/json')
+                        .expect('Content-Type', /json/)
+                        .expect(200)
+                        .expect(function(res) {
+                            expect(res.body)
+                                .to.be.true;
+                        })
+                        .end(done)
+                })
+                .catch(done);
+        });
+
+        it('Listar Cursos', function(done) {
+            Curso.novaInstancia(criarObjetoCurso())
+                .then(function(curso) {
+                    request(express)
+                        .get('/api/cursos')
+                        .set('Accept', 'application/json')
+                        .expect('Content-Type', /json/)
+                        .expect(200)
+                        .expect(function(res) {
+                            expect(res.body)
+                                .to.be.an('array')
+                                .and.have.length(1);
+                        })
+                        .end(done)
+                })
+                .catch(done);
+        });
     });
 
 });
