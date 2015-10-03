@@ -1,4 +1,4 @@
-var Professor = require('../../models/Disciplina');
+var Disciplina = require('../../models/Disciplina');
 
 function criarObjetoDisciplina() {
     return {
@@ -10,8 +10,10 @@ function criarObjetoDisciplina() {
 function verificarDisciplinaValida(res) {
 		expect(res.body)
         .to.be.an('object')
-        .and.to.have.all.keys(['disciplina', 'sigla']);
-}
+        .and.to.contain.all.keys(['id','disciplina', 'sigla', 'createdAt', 'updatedAt']);
+		
+		
+}	
 
 describe('API Disciplinas', function () {
     var dadosDisciplina;
@@ -52,14 +54,14 @@ describe('API Disciplinas', function () {
                 .then(function(disciplina) {
                    request(express)
                         .put('/api/disciplinas/' + disciplina.get('id'))
-                       .send({email: 'outro@foo.bar'})
+                       .send({sigla: 'DW-2'})
                         .set('Accept', 'application/json')
                         .expect('Content-Type', /json/)
                         .expect(200)
                        .expect(verificarDisciplinaValida)
                         .expect(function(res) {
-                         expect(res.body.email)
-                                .to.be.equal('outro@foo.bar');
+                         expect(res.body.sigla)
+                                .to.be.equal('DW-2');
                         })
                        .end(done)
                 })
