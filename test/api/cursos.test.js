@@ -13,8 +13,13 @@ function verificarCursoValido(res) {
         .and.to.have.all.keys(['id', 'curso', 'sigla','createdAt', 'updatedAt','areaId']);
 }
 
+function verificarNovoCursoValido(res) {
+    expect(res.body)
+        .to.be.an('object')
+        .and.to.have.all.keys(['id', 'curso', 'sigla','createdAt', 'updatedAt']);
+}
+
 describe('API Cursos', function () {
-    var dadosCurso;
 
     beforeEach(function (done) {
         Curso.truncar()
@@ -29,7 +34,7 @@ describe('API Cursos', function () {
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
                 .expect(200)
-                .expect(verificarCursoValido)
+                .expect(verificarNovoCursoValido)
                 .end(done);
         });
 
