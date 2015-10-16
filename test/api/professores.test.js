@@ -2,7 +2,7 @@ var Professor = require('../../models/Professor');
 
 function criarObjetoProfessor() {
     return {
-        prontuario: '123456-0',
+        prontuario: '12345-0',
         nome: 'João',
         sobrenome: 'da Silva',
         email: 'joaodasilva@foo.bar'
@@ -49,7 +49,7 @@ describe('API Professores', function () {
         });
 
         it('Editar Professor', function(done) {
-            Professor.novaInstancia(criarObjetoProfessor())
+             Professor.novaInstancia(criarObjetoProfessor())
                 .then(function(professor) {
                     request(express)
                         .put('/api/professores/' + professor.get('id'))
@@ -84,7 +84,7 @@ describe('API Professores', function () {
                 .catch(done);
         });
 
-        it('Listar professores', function(done) {
+        it('Listar Professores', function(done) {
             Professor.novaInstancia(criarObjetoProfessor())
                 .then(function(professor) {
                     request(express)
