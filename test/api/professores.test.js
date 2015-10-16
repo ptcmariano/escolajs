@@ -16,7 +16,6 @@ function verificarProfessorValido(res) {
 }
 
 describe('API Professores', function () {
-    var dadosProfessor;
 
     beforeEach(function (done) {
         Professor.truncar()
@@ -102,6 +101,65 @@ describe('API Professores', function () {
                 })
                 .catch(done);
         });
+    });
+
+    describe('Validação', function() {
+        it('Retornar erro de validação quando o prontuário possuir um formato incorreto.',
+            function (done) {
+                var dadosProfessor = criarObjetoProfessor();
+                dadosProfessor.prontuario = '12345678';
+
+                apiUtil.criarJsonPost('/api/professores', dadosProfessor, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                    .end(done);
+            }
+        );
+
+        it('Retornar erro de chave quando o prontuário for duplicado.',
+            function (done) {
+                var dadosProfessor = criarObjetoProfessor();
+                apiUtil.criarJsonPost('/api/professores', dadosProfessor, 200)
+                    .end(function (err, res) {
+                        expect(err).to.be.equals(null);
+                        apiUtil.criarJsonPost('/api/professores', dadosProfessor, 400)
+                            .expect(apiUtil.verificarErroApi('ErroChaveUnica'))
+                            .end(done);
+                    });
+            }
+        );
+
+        it('Retornar erro de validação quando os campos não nulos não forem enviados.',
+            function (done) {
+                var professorEmBranco = {};
+
+                apiUtil.criarJsonPost('/api/professores', professorEmBranco, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao', 4))
+                    .end(done);
+            }
+        );
+
+        it('Retornar erro de validação quando o nome ou sobrenome forem muito pequenos.',
+            function (done) {
+                var dadosProfessor = criarObjetoProfessor();
+                dadosProfessor.nome = 'Jo';
+                dadosProfessor.sobrenome = 'da';
+
+                apiUtil.criarJsonPost('/api/professores', dadosProfessor, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao', 2))
+                    .end(done);
+            }
+        );
+
+        it('Retornar erro de validação quando o e-mail possuir um formato incorreto.',
+            function (done) {
+                var dadosProfessor = criarObjetoProfessor();
+                dadosProfessor.email = 'joaodasilva@foo';
+
+                apiUtil.criarJsonPost('/api/professores', dadosProfessor, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao', 1))
+                    .end(done);
+            }
+        );
     });
 
 });
