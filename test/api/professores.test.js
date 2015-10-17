@@ -1,4 +1,5 @@
-var Professor = require('../../models/Professor');
+var sequelize = require('../../config/sequelize').getSequelize(),
+    Professor = sequelize.model('Professor');
 
 function criarObjetoProfessor() {
     return {
@@ -18,7 +19,7 @@ function verificarProfessorValido(res) {
 describe('API Professores', function () {
 
     beforeEach(function (done) {
-        Professor.truncar()
+        Professor.destroy({truncate: true})
             .finally(done);
     });
 
@@ -35,7 +36,7 @@ describe('API Professores', function () {
         });
 
         it('Exibir Professor', function(done) {
-            Professor.novaInstancia(criarObjetoProfessor())
+            Professor.create(criarObjetoProfessor())
                 .then(function(professor) {
                     request(express)
                         .get('/api/professores/' + professor.get('id'))
@@ -49,7 +50,7 @@ describe('API Professores', function () {
         });
 
         it('Editar Professor', function(done) {
-             Professor.novaInstancia(criarObjetoProfessor())
+             Professor.create(criarObjetoProfessor())
                 .then(function(professor) {
                     request(express)
                         .put('/api/professores/' + professor.get('id'))
@@ -68,7 +69,7 @@ describe('API Professores', function () {
         });
 
         it('Excluir Professor', function(done) {
-            Professor.novaInstancia(criarObjetoProfessor())
+            Professor.create(criarObjetoProfessor())
                 .then(function(professor) {
                     request(express)
                         .delete('/api/professores/' + professor.get('id'))
@@ -85,7 +86,7 @@ describe('API Professores', function () {
         });
 
         it('Listar Professores', function(done) {
-            Professor.novaInstancia(criarObjetoProfessor())
+            Professor.create(criarObjetoProfessor())
                 .then(function(professor) {
                     request(express)
                         .get('/api/professores')

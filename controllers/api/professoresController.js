@@ -1,7 +1,10 @@
-var Professor = require('../../models/Professor');
+var sequelize = require('../../config/sequelize').getSequelize(),
+    Professor = sequelize.model('Professor');
 
 exports.novoProfessor = function(req, res, next) {
-    return Professor.novaInstancia(req.body)
+    return Professor.create(req.body, {
+        fields: ['prontuario', 'nome', 'sobrenome', 'email']
+    })
         .then(function(instancia) {
             res.json(instancia);
         })
@@ -13,7 +16,7 @@ exports.exibirProfessor = function(req, res) {
 };
 
 exports.editarProfessor = function(req, res, next) {
-    req.instanciaProfessor.salvarAlteracoes(req.body)
+    req.instanciaProfessor.updateAttributes(req.body)
         .then(function() {
             res.json(req.instanciaProfessor);
         })
@@ -21,7 +24,7 @@ exports.editarProfessor = function(req, res, next) {
 };
 
 exports.excluirProfessor = function(req, res, next) {
-    req.instanciaProfessor.excluirInstancia()
+    req.instanciaProfessor.destroy()
         .then(function() {
             res.json(true);
         })
@@ -29,7 +32,7 @@ exports.excluirProfessor = function(req, res, next) {
 };
 
 exports.listarProfessores = function(req, res, next) {
-    Professor.listarInstancias()
+    Professor.findAll()
         .then(function(instancias) {
             res.json(instancias);
         })
@@ -37,7 +40,7 @@ exports.listarProfessores = function(req, res, next) {
 };
 
 exports.obterProfessorMiddleware = function(req, res, next, id) {
-    Professor.obterPorId(id)
+    Professor.findById(id)
         .then(function(instancia) {
             if (instancia === null) {
                 var err = new Error('Not Found');

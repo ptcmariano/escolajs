@@ -1,4 +1,5 @@
-var Area = require('../../models/Area');
+var sequelize = require('../../config/sequelize').getSequelize(),
+    Area = sequelize.model('Area');
 
 function criarObjetoArea() {
     return {
@@ -13,10 +14,9 @@ function verificarAreaValida(res) {
 }
 
 describe('API Area', function () {
-    var dadosArea;
-
+    
     beforeEach(function (done) {
-        Area.truncar()
+        Area.destroy({truncate:true})
             .finally(done);
     });
     
@@ -33,7 +33,7 @@ describe('API Area', function () {
         });
 
         it('Exibir Area', function(done) {
-            Area.novaInstancia(criarObjetoArea())
+            Area.create(criarObjetoArea())
                 .then(function(area) {
                     request(express)
                         .get('/api/areas/' + area.get('id'))
@@ -47,7 +47,7 @@ describe('API Area', function () {
         });
         
         it('Editar Area', function(done) {
-            Area.novaInstancia(criarObjetoArea())
+            Area.create(criarObjetoArea())
                 .then(function(area) {
                     request(express)
                         .put('/api/areas/' + area.get('id'))
@@ -66,7 +66,7 @@ describe('API Area', function () {
         });
         
         it('Excluir Area', function(done) {
-            Area.novaInstancia(criarObjetoArea())
+            Area.create(criarObjetoArea())
                 .then(function(area) {
                     request(express)
                         .delete('/api/areas/' + area.get('id'))
@@ -83,7 +83,7 @@ describe('API Area', function () {
         });
         
         it('Listar Areas', function(done) {
-            Area.novaInstancia(criarObjetoArea())
+            Area.create(criarObjetoArea())
                 .then(function(area) {
                     request(express)
                         .get('/api/areas')

@@ -1,44 +1,49 @@
-var Curso = require('../../models/Curso');
+var sequelize = require('../../config/sequelize').getSequelize(),
+    Curso = sequelize.model('Curso');
 
-exports.novoCurso = function(req, res, next) {
-    return Curso.novaInstancia(req.body)
-        .then(function(instancia) {
+exports.novoCurso = function (req, res, next) {
+    return Curso.create(req.body, {
+        fields: ['curso', 'sigla']
+    })
+        .then(function (instancia) {
             res.json(instancia);
         })
         .catch(next);
 };
 
-exports.exibirCurso = function(req, res) {
+exports.exibirCurso = function (req, res) {
     res.json(req.instanciaCurso);
 };
 
-exports.editarCurso = function(req, res, next) {
-    req.instanciaCurso.salvarAlteracoes(req.body)
-        .then(function() {
+exports.editarCurso = function (req, res, next) {
+    req.instanciaCurso.updateAttributes(req.body, {
+        fields: ['curso', 'sigla']
+    })
+        .then(function () {
             res.json(req.instanciaCurso);
         })
         .catch(next);
 };
 
-exports.excluirCurso = function(req, res, next) {
-    req.instanciaCurso.excluirInstancia()
-        .then(function() {
+exports.excluirCurso = function (req, res, next) {
+    req.instanciaCurso.destroy()
+        .then(function () {
             res.json(true);
         })
         .catch(next);
 };
 
-exports.listarCursos = function(req, res, next) {
-    Curso.listarInstancias()
-        .then(function(instancias) {
+exports.listarCursos = function (req, res, next) {
+    Curso.findAll()
+        .then(function (instancias) {
             res.json(instancias);
         })
         .catch(next);
 };
 
-exports.obterCursoMiddleware = function(req, res, next, id) {
-    Curso.obterPorId(id)
-        .then(function(instancia) {
+exports.obterCursoMiddleware = function (req, res, next, id) {
+    Curso.findById(id)
+        .then(function (instancia) {
             if (instancia === null) {
                 var err = new Error('Not Found');
                 err.status = 404;

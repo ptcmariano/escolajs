@@ -1,4 +1,5 @@
-var Disciplina = require('../../models/Disciplina');
+var sequelize = require('../../config/sequelize').getSequelize(),
+    Disciplina = sequelize.model('Disciplina');
 
 function criarObjetoDisciplina() {
     return {
@@ -16,10 +17,9 @@ function verificarDisciplinaValida(res) {
 }	
 
 describe('API Disciplinas', function () {
-    var dadosDisciplina;
 
     beforeEach(function (done) {
-        Disciplina.truncar()
+        Disciplina.destroy({truncate: true})
             .finally(done);
     });
 
@@ -36,7 +36,7 @@ describe('API Disciplinas', function () {
         });
 
         it('Exibir Disciplina', function(done) {
-            Disciplina.novaInstancia(criarObjetoDisciplina())
+            Disciplina.create(criarObjetoDisciplina())
                 .then(function(disciplina) {
                     request(express)
                         .get('/api/disciplinas/' + disciplina.get('id'))
@@ -50,7 +50,7 @@ describe('API Disciplinas', function () {
         });
 
         it('Editar Disciplina', function(done) {
-            Disciplina.novaInstancia(criarObjetoDisciplina())
+            Disciplina.create(criarObjetoDisciplina())
                 .then(function(disciplina) {
                    request(express)
                         .put('/api/disciplinas/' + disciplina.get('id'))
@@ -69,7 +69,7 @@ describe('API Disciplinas', function () {
         });
 
        it('Excluir Disciplina', function(done) {
-            Disciplina.novaInstancia(criarObjetoDisciplina())
+            Disciplina.create(criarObjetoDisciplina())
                 .then(function(disciplina) {
                     request(express)
                         .delete('/api/disciplinas/' + disciplina.get('id'))
@@ -86,7 +86,7 @@ describe('API Disciplinas', function () {
        });
 
         it('Listar Disciplinas', function(done) {
-        	Disciplina.novaInstancia(criarObjetoDisciplina())
+        	Disciplina.create(criarObjetoDisciplina())
                .then(function(disciplina) {
                     request(express)
                         .get('/api/disciplinas')

@@ -1,4 +1,5 @@
-var Aluno = require('../../models/Aluno');
+var sequelize = require('../../config/sequelize').getSequelize(),
+    Aluno = sequelize.model('Aluno');
 
 function criarObjetoAluno() {
     return {
@@ -19,7 +20,7 @@ describe('API Alunos', function () {
     var dadosAluno;
 
     beforeEach(function (done) {
-        Aluno.truncar()
+        Aluno.destroy({truncate: true})
             .finally(done);
     });
 
@@ -36,7 +37,7 @@ describe('API Alunos', function () {
         });
 
         it('Exibir Aluno', function(done) {
-            Aluno.novaInstancia(criarObjetoAluno())
+            Aluno.create(criarObjetoAluno())
                 .then(function(aluno) {
                     request(express)
                         .get('/api/alunos/' + aluno.get('id'))
@@ -50,7 +51,7 @@ describe('API Alunos', function () {
         });
 
         it('Editar Aluno', function(done) {
-            Aluno.novaInstancia(criarObjetoAluno())
+            Aluno.create(criarObjetoAluno())
                 .then(function(aluno) {
                     request(express)
                         .put('/api/alunos/' + aluno.get('id'))
@@ -69,7 +70,7 @@ describe('API Alunos', function () {
         });
 
         it('Excluir Aluno', function(done) {
-            Aluno.novaInstancia(criarObjetoAluno())
+            Aluno.create(criarObjetoAluno())
                 .then(function(aluno) {
                     request(express)
                         .delete('/api/alunos/' + aluno.get('id'))
@@ -86,7 +87,7 @@ describe('API Alunos', function () {
         });
 
         it('Listar Alunos', function(done) {
-            Aluno.novaInstancia(criarObjetoAluno())
+            Aluno.create(criarObjetoAluno())
                 .then(function(aluno) {
                     request(express)
                         .get('/api/alunos')

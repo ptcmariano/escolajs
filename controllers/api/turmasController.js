@@ -1,7 +1,10 @@
-var Turma = require('../../models/Turma');
+var sequelize = require('../../config/sequelize').getSequelize(),
+    Turma = sequelize.model('Turma');
 
 exports.novaTurma = function(req, res, next) {
-    return Turma.novaInstancia(req.body)
+    return Turma.create(req.body, {
+        fields: ['sigla', 'ano', 'semestre']
+    })
         .then(function(instancia) {
             res.json(instancia);
         })
@@ -13,7 +16,9 @@ exports.exibirTurma = function(req, res) {
 };
 
 exports.editarTurma = function(req, res, next) {
-    req.instanciaTurma.salvarAlteracoes(req.body)
+    req.instanciaTurma.updateAttributes(req.body, {
+        fields: ['sigla', 'ano', 'semestre']
+    })
         .then(function() {
             res.json(req.instanciaTurma);
         })
@@ -21,7 +26,7 @@ exports.editarTurma = function(req, res, next) {
 };
 
 exports.excluirTurma = function(req, res, next) {
-    req.instanciaTurma.excluirInstancia()
+    req.instanciaTurma.destroy()
         .then(function() {
             res.json(true);
         })
@@ -29,7 +34,7 @@ exports.excluirTurma = function(req, res, next) {
 };
 
 exports.listarTurmas = function(req, res, next) {
-    Turma.listarInstancias()
+    Turma.findAll()
         .then(function(instancias) {
             res.json(instancias);
         })
@@ -37,7 +42,7 @@ exports.listarTurmas = function(req, res, next) {
 };
 
 exports.obterTurmaMiddleware = function(req, res, next, id) {
-    Turma.obterPorId(id)
+    Turma.findById(id)
         .then(function(instancia) {
             if (instancia === null) {
                 var err = new Error('Not Found');

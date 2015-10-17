@@ -1,4 +1,5 @@
-var Curso = require('../../models/Curso');
+var sequelize = require('../../config/sequelize').getSequelize(),
+    Curso = sequelize.model('Curso');
 
 function criarObjetoCurso() {
     return {
@@ -10,24 +11,24 @@ function criarObjetoCurso() {
 function verificarCursoValido(res) {
     expect(res.body)
         .to.be.an('object')
-        .and.to.have.all.keys(['id', 'curso', 'sigla','createdAt', 'updatedAt','areaId']);
+        .and.to.have.all.keys(['id', 'curso', 'sigla', 'createdAt', 'updatedAt', 'areaId']);
 }
 
 function verificarNovoCursoValido(res) {
     expect(res.body)
         .to.be.an('object')
-        .and.to.have.all.keys(['id', 'curso', 'sigla','createdAt', 'updatedAt']);
+        .and.to.have.all.keys(['id', 'curso', 'sigla', 'createdAt', 'updatedAt']);
 }
 
 describe('API Cursos', function () {
 
     beforeEach(function (done) {
-        Curso.truncar()
+        Curso.destroy({truncate: true})
             .finally(done);
     });
 
-    describe('Métodos CRUD', function() {
-        it('Novo Curso', function(done) {
+    describe('Métodos CRUD', function () {
+        it('Novo Curso', function (done) {
             request(express)
                 .post('/api/cursos')
                 .send(criarObjetoCurso())
@@ -38,9 +39,9 @@ describe('API Cursos', function () {
                 .end(done);
         });
 
-        it('Exibir Curso', function(done) {
-            Curso.novaInstancia(criarObjetoCurso())
-                .then(function(curso) {
+        it('Exibir Curso', function (done) {
+            Curso.create(criarObjetoCurso())
+                .then(function (curso) {
                     request(express)
                         .get('/api/cursos/' + curso.get('id'))
                         .set('Accept', 'application/json')
@@ -52,9 +53,9 @@ describe('API Cursos', function () {
                 .catch(done);
         });
 
-        it('Editar Curso', function(done) {
-            Curso.novaInstancia(criarObjetoCurso())
-                .then(function(curso) {
+        it('Editar Curso', function (done) {
+            Curso.create(criarObjetoCurso())
+                .then(function (curso) {
                     request(express)
                         .put('/api/cursos/' + curso.get('id'))
                         .send({curso: 'Matematica'})
@@ -62,7 +63,7 @@ describe('API Cursos', function () {
                         .expect('Content-Type', /json/)
                         .expect(200)
                         .expect(verificarCursoValido)
-                        .expect(function(res) {
+                        .expect(function (res) {
                             expect(res.body.curso)
                                 .to.be.equal('Matematica');
                         })
@@ -71,15 +72,15 @@ describe('API Cursos', function () {
                 .catch(done);
         });
 
-        it('Excluir Curso', function(done) {
-            Curso.novaInstancia(criarObjetoCurso())
-                .then(function(curso) {
+        it('Excluir Curso', function (done) {
+            Curso.create(criarObjetoCurso())
+                .then(function (curso) {
                     request(express)
                         .delete('/api/cursos/' + curso.get('id'))
                         .set('Accept', 'application/json')
                         .expect('Content-Type', /json/)
                         .expect(200)
-                        .expect(function(res) {
+                        .expect(function (res) {
                             expect(res.body)
                                 .to.be.true;
                         })
@@ -88,15 +89,15 @@ describe('API Cursos', function () {
                 .catch(done);
         });
 
-        it('Listar Cursos', function(done) {
-            Curso.novaInstancia(criarObjetoCurso())
-                .then(function(curso) {
+        it('Listar Cursos', function (done) {
+            Curso.create(criarObjetoCurso())
+                .then(function (curso) {
                     request(express)
                         .get('/api/cursos')
                         .set('Accept', 'application/json')
                         .expect('Content-Type', /json/)
                         .expect(200)
-                        .expect(function(res) {
+                        .expect(function (res) {
                             expect(res.body)
                                 .to.be.an('array')
                                 .and.have.length(1);

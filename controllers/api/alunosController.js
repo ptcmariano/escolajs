@@ -1,44 +1,49 @@
-var Aluno = require('../../models/Aluno');
+var sequelize = require('../../config/sequelize').getSequelize(),
+    Aluno = sequelize.model('Aluno');
 
-exports.novoAluno = function(req, res, next) {
-    return Aluno.novaInstancia(req.body)
-        .then(function(instancia) {
+exports.novoAluno = function (req, res, next) {
+    return Aluno.create(req.body, {
+        fields: ['prontuario', 'nome', 'sobrenome', 'email']
+    })
+        .then(function (instancia) {
             res.json(instancia);
         })
         .catch(next);
 };
 
-exports.exibirAluno = function(req, res) {
+exports.exibirAluno = function (req, res) {
     res.json(req.instanciaAluno);
 };
 
-exports.editarAluno = function(req, res, next) {
-    req.instanciaAluno.salvarAlteracoes(req.body)
-        .then(function() {
+exports.editarAluno = function (req, res, next) {
+    req.instanciaAluno.updateAttributes(req.body, {
+        fields: ['prontuario', 'nome', 'sobrenome', 'email']
+    })
+        .then(function () {
             res.json(req.instanciaAluno);
         })
         .catch(next);
 };
 
-exports.excluirAluno = function(req, res, next) {
-    req.instanciaAluno.excluirInstancia()
-        .then(function() {
+exports.excluirAluno = function (req, res, next) {
+    req.instanciaAluno.destroy()
+        .then(function () {
             res.json(true);
         })
         .catch(next);
 };
 
-exports.listarAlunos = function(req, res, next) {
-    Aluno.listarInstancias()
-        .then(function(instancias) {
+exports.listarAlunos = function (req, res, next) {
+    Aluno.findAll()
+        .then(function (instancias) {
             res.json(instancias);
         })
         .catch(next);
 };
 
-exports.obterAlunoMiddleware = function(req, res, next, id) {
-    Aluno.obterPorId(id)
-        .then(function(instancia) {
+exports.obterAlunoMiddleware = function (req, res, next, id) {
+    Aluno.findById(id)
+        .then(function (instancia) {
             if (instancia === null) {
                 var err = new Error('Not Found');
                 err.status = 404;
