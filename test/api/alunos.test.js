@@ -104,5 +104,64 @@ describe('API Alunos', function () {
                 .catch(done);
         });
     });
+    
+    describe('Validação', function() {
+        it('Retornar erro de validação quando o prontuário possuir um formato incorreto.',
+            function(done) {
+                var dadosAluno = criarObjetoAluno();
+                dadosAluno.prontuario = '4651234';
+                
+                apiUtil.criarJsonPost('/api/alunos', dadosAluno, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                    .end(done);
+            }
+        );
+        
+        it('Retornar erro de chave quando o prontuário for duplicado.',
+            function (done) {
+                var dadosAluno = criarObjetoAluno();
+                apiUtil.criarJsonPost('/api/alunos', dadosAluno, 200)
+                    .end(function (err, res) {
+                        expect(err).to.be.equals(null);
+                        apiUtil.criarJsonPost('/api/alunos', dadosAluno, 400)
+                            .expect(apiUtil.verificarErroApi('ErroChaveUnica'))
+                            .end(done);
+                    });
+            }
+        );
+        
+        it('Retornar erro de validação quando os campos não nulos não forem enviados.',
+            function (done) {
+                var alunoEmBranco = {};
+
+                apiUtil.criarJsonPost('/api/alunos', alunoEmBranco, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao', 4))
+                    .end(done);
+            }
+        );
+        
+        it('Retornar erro de validação quando o nome ou sobrenome forem muito pequenos.',
+            function (done) {
+                var dadosAluno = criarObjetoAluno();
+                dadosAluno.nome = 'Jo';
+                dadosAluno.sobrenome = 'da';
+
+                apiUtil.criarJsonPost('/api/alunos', dadosAluno, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao', 2))
+                    .end(done);
+            }
+        );
+        
+        it('Retornar erro de validação quando o e-mail possuir um formato incorreto.',
+            function (done) {
+                var dadosAluno = criarObjetoAluno();
+                dadosAluno.email = 'joaodasilva@foo';
+
+                apiUtil.criarJsonPost('/api/alunos', dadosAluno, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao', 1))
+                    .end(done);
+            }
+        );
+    })
 
 });

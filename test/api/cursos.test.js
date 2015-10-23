@@ -107,5 +107,48 @@ describe('API Cursos', function () {
                 .catch(done);
         });
     });
+    
+    describe('Validação', function() {
+        it('Retornar erro de validação quando os campos não nulos não forem enviados.',
+            function (done) {
+                var cursoEmBranco = {};
+
+                apiUtil.criarJsonPost('/api/cursos', cursoEmBranco, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao', 2))
+                    .end(done);
+            }
+        );
+        
+        it('Retornar erro caso o curso não possua entre 3 e 100 caracteres.', function(done) {
+            var dadosCurso = criarObjetoCurso();
+            dadosCurso.curso = 'ca';
+            
+            apiUtil.criarJsonPost('/api/cursos', dadosCurso, 400)
+                .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                .end(done);
+        });
+        
+        it('Retornar erro caso a sigla do curso não possua entre 2 e 20 caracteres.', function(done) {
+            var dadosCurso = criarObjetoCurso();
+            dadosCurso.sigla = 'c';
+            
+            apiUtil.criarJsonPost('/api/cursos', dadosCurso, 400)
+                .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                .end(done);
+        });
+        
+        it('Retornar erro de chave quando o curso ou sigla forem duplicado.',
+            function (done) {
+                var dadosCurso = criarObjetoCurso();
+                apiUtil.criarJsonPost('/api/cursos', dadosCurso, 200)
+                    .end(function (err, res) {
+                        expect(err).to.be.equals(null);
+                        apiUtil.criarJsonPost('/api/cursos', dadosCurso, 400)
+                            .expect(apiUtil.verificarErroApi('ErroChaveUnica'))
+                            .end(done);
+                    });
+            }
+        );        
+    });
 
 });
