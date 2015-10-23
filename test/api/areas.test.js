@@ -100,5 +100,20 @@ describe('API Area', function () {
                 .catch(done);
         });
     });
+    
+    describe('Validacao', function() {
+    	
+        it('Retornar erro de validacao quando a area for nulo.',
+                function (done) {
+                    var dadosArea = criarObjetoArea();
+                    dadosArea.area = null;
+
+                    apiUtil.criarJsonPost('/api/areas', dadosArea, 400)
+                        .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                        .end(done);
+                }
+            );
+    	
+    });
 
 });

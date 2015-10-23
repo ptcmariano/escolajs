@@ -102,6 +102,30 @@ describe('API Disciplinas', function () {
                 })
                 .catch(done);
         });
+        
+        describe('Validação', function() {
+            it('Retornar erro de validação quando a disciplina possuir o tamanho incorreto.',
+                    function (done) {
+                        var dadosDisciplina = criarObjetoDisciplina();
+                        dadosDisciplina.disciplina = 'a1';
+
+                        apiUtil.criarJsonPost('/api/disciplinas', dadosDisciplina, 400)
+                            .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                            .end(done);
+                    }
+                );
+            it('Retornar erro de validação quando a sigla possuir o tamanho incorreto.',
+                    function (done) {
+                        var dadosDisciplina = criarObjetoDisciplina();
+                        dadosDisciplina.sigla = 'a1';
+
+                        apiUtil.criarJsonPost('/api/disciplinas', dadosDisciplina, 400)
+                            .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                            .end(done);
+                    }
+                );
+        	
+        });
     });
 
 }); 

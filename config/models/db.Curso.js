@@ -7,8 +7,8 @@ module.exports = function(sequelize) {
             allowNull: false,
             unique: true,
             validate:{
-                len:{
-                    args: [3,100],
+                is:{
+                    args: /^[A-Za-zê]{3,100}$/,
                     msg: 'O Curso deve possuir entre 3 e 100 caracteres.'
                 }
             }
@@ -18,9 +18,9 @@ module.exports = function(sequelize) {
             allowNull: false,
             unique: true,
             validate:{
-                len:{
-                    args: [2,20],
-                    msg: 'A Sigla do Curse deve possuir entre 2 e 20 caracteres.'
+                is:{
+                    args: /^[A-Z]{2,20}$/,
+                    msg: 'A Sigla do Curso deve possuir entre 2 e 20 letras.'
                 }
             }
         }

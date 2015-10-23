@@ -107,5 +107,30 @@ describe('API Cursos', function () {
                 .catch(done);
         });
     });
+    
+    describe('Validação', function() {
+    	
+        it('Retornar erro de validação da sigla não contem a quantidade permitida de caracteres.',
+                function (done) {
+                    var dadosCurso = criarObjetoCurso();
+                    dadosCurso.sigla = 'A';
 
+                    apiUtil.criarJsonPost('/api/cursos', dadosCurso, 400)
+                        .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                        .end(done);
+                }
+            );
+        
+        it('Retornar erro de validação do curso não contem a quantidade permitida de caracteres.',
+                function (done) {
+                    var dadosCurso = criarObjetoCurso();
+                    dadosCurso.curso = 'A';
+
+                    apiUtil.criarJsonPost('/api/cursos', dadosCurso, 400)
+                        .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                        .end(done);
+                }
+            );
+
+    });
 });
