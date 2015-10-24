@@ -19,8 +19,8 @@ module.exports = function(sequelize) {
             unique: true,
             validate: {
                 len: {
-                    args: [3,100],
-                    msg: 'O Nome da disciplina deve possuir entre 3 e 100 caracteres.'
+                    args: [3,20],
+                    msg: 'O Nome da disciplina deve possuir entre 3 e 20 caracteres.'
                }    
             }
         }

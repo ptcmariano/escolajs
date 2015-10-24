@@ -103,5 +103,40 @@ describe('API Disciplinas', function () {
                 .catch(done);
         });
     });
+    
+    describe('Validação', function() {
+   	 it('Retornar erro de validação quando o disciplina e sigla forem muito pequenos.',
+                function (done) {
+                    var dadosDisciplina = criarObjetoDisciplina();
+                    dadosDisciplina.disciplina= 'to';
+                    dadosDisciplina.sigla = 't'
+                    
+                    apiUtil.criarJsonPost('/api/disciplinas', dadosDisciplina, 400)
+                        .expect(apiUtil.verificarErroApi('ErroValidacao', 2))
+                        .end(done);
+                }
+            );
+   	 
+   	it('Retornar erro de chave quando disciplina for duplicada.',
+            function (done) {
+   				var dadosDisciplina = criarObjetoDisciplina();
+                apiUtil.criarJsonPost('/api/disciplinas', dadosDisciplina, 200)
+                    .end(function (err, res) {
+                        expect(err).to.be.equals(null);
+                        apiUtil.criarJsonPost('/api/disciplinas', dadosDisciplina, 400)
+                            .expect(apiUtil.verificarErroApi('ErroChaveUnica'))
+                            .end(done);
+                    });
+            }
+        );
+ it('Retornar erro de validação quando os campos não nulos não forem enviados.',
+            function (done) {
+                var disciplinaEmBranco = {};
 
+                apiUtil.criarJsonPost('/api/disciplinas', disciplinaEmBranco, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao', 2))
+                    .end(done);
+            }
+        );
+    });
 }); 
