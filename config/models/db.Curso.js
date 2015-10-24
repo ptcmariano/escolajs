@@ -20,7 +20,7 @@ module.exports = function(sequelize) {
             validate:{
                 len:{
                     args: [2,20],
-                    msg: 'A Sigla do Curse deve possuir entre 2 e 20 caracteres.'
+                    msg: 'A Sigla do Curso deve possuir entre 2 e 20 caracteres.'
                 }
             }
         }

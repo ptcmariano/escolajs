@@ -3,12 +3,12 @@ var Sequelize = require('sequelize');
 module.exports = function(sequelize) {
     return sequelize.define('Aluno', {
         prontuario: {
-            type: Sequelize.STRING(15),
+            type: Sequelize.STRING(8),
             allowNull: false,
             unique: true,
             validate: {
                 is: {
-                    args: [/^\d{6}\-\d{1}$/],
+                    args: [/^\d{6}-\d{1}$/],
                     msg: 'O prontuário possui um formato inválido.'
                 }
             }

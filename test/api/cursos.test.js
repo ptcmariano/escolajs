@@ -107,5 +107,30 @@ describe('API Cursos', function () {
                 .catch(done);
         });
     });
+    describe('Validação', function() {
+
+        it('Retornar erro de validação quando os campos não nulos não forem enviados.',
+            function (done) {
+                var cursoEmBranco = {};
+
+                apiUtil.criarJsonPost('/api/cursos', cursoEmBranco, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao', 2))
+                    .end(done);
+            }
+        );
+
+        it('Retornar erro de validação quando o curso ou sigla for muito pequeno.',
+            function (done) {
+                var dadosCurso = criarObjetoCurso();
+                dadosCurso.curso = 'Jo';
+                dadosCurso.sigla = 'd';
+
+                apiUtil.criarJsonPost('/api/cursos', dadosCurso, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao', 2))
+                    .end(done);
+            }
+        );
+
+    });
 
 });
