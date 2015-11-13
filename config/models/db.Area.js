@@ -5,7 +5,13 @@ module.exports = function(sequelize) {
         area: {
             type: Sequelize.STRING(10),
             allowNull: false,
-            unique: true
+            unique: true,
+            validate:{
+            	 len: {
+                     args: [3,100],
+                     msg: 'A area deve possuir entre 3 e 100 caracteres.'
+                 }
+            }
         }
     }, {
         freezeTableName: true
