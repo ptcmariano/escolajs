@@ -1,14 +1,13 @@
-
-exports.criarJsonPost = function(url, dataToSend, statusExpected, resCallback) {
+exports.criarJsonPost = function (url, dataToSend, statusExpected, resCallback) {
     return request(express).post(url)
         .send(dataToSend)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(statusExpected);        
+        .expect(statusExpected);
 };
 
-exports.verificaErroCampo = function(nomeCampo) {
-    return function(res) {
+exports.verificaErroCampo = function (nomeCampo) {
+    return function (res) {
         expect(res.body)
             .to.be.an('object')
             .to.contain.all.keys(['nome', 'erros'])
@@ -16,12 +15,12 @@ exports.verificaErroCampo = function(nomeCampo) {
             .that.is.an('array')
             .with.deep.property('[0]')
             .that.contains.property('campo')
-            .that.is.equal(nomeCampo);           
+            .that.is.equal(nomeCampo);
     }
 }
 
-exports.verificarErroApi = function(nomeErro, qtdErros) {
-    return function(res) {
+exports.verificarErroApi = function (nomeErro, qtdErros) {
+    return function (res) {
         expect(res.body)
             .to.be.an('object')
             .to.contain.all.keys(['nome', 'erros'])

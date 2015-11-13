@@ -24,8 +24,8 @@ describe('API Alunos', function () {
             .finally(done);
     });
 
-    describe('Métodos CRUD', function() {
-        it('Novo Aluno', function(done) {
+    describe('Métodos CRUD', function () {
+        it('Novo Aluno', function (done) {
             request(express)
                 .post('/api/alunos')
                 .send(criarObjetoAluno())
@@ -36,9 +36,9 @@ describe('API Alunos', function () {
                 .end(done);
         });
 
-        it('Exibir Aluno', function(done) {
+        it('Exibir Aluno', function (done) {
             Aluno.create(criarObjetoAluno())
-                .then(function(aluno) {
+                .then(function (aluno) {
                     request(express)
                         .get('/api/alunos/' + aluno.get('id'))
                         .set('Accept', 'application/json')
@@ -50,9 +50,9 @@ describe('API Alunos', function () {
                 .catch(done);
         });
 
-        it('Editar Aluno', function(done) {
+        it('Editar Aluno', function (done) {
             Aluno.create(criarObjetoAluno())
-                .then(function(aluno) {
+                .then(function (aluno) {
                     request(express)
                         .put('/api/alunos/' + aluno.get('id'))
                         .send({email: 'outro@foo.bar'})
@@ -60,7 +60,7 @@ describe('API Alunos', function () {
                         .expect('Content-Type', /json/)
                         .expect(200)
                         .expect(verificarAlunoValido)
-                        .expect(function(res) {
+                        .expect(function (res) {
                             expect(res.body.email)
                                 .to.be.equal('outro@foo.bar');
                         })
@@ -69,15 +69,15 @@ describe('API Alunos', function () {
                 .catch(done);
         });
 
-        it('Excluir Aluno', function(done) {
+        it('Excluir Aluno', function (done) {
             Aluno.create(criarObjetoAluno())
-                .then(function(aluno) {
+                .then(function (aluno) {
                     request(express)
                         .delete('/api/alunos/' + aluno.get('id'))
                         .set('Accept', 'application/json')
                         .expect('Content-Type', /json/)
                         .expect(200)
-                        .expect(function(res) {
+                        .expect(function (res) {
                             expect(res.body)
                                 .to.be.true;
                         })
@@ -86,15 +86,15 @@ describe('API Alunos', function () {
                 .catch(done);
         });
 
-        it('Listar Alunos', function(done) {
+        it('Listar Alunos', function (done) {
             Aluno.create(criarObjetoAluno())
-                .then(function(aluno) {
+                .then(function (aluno) {
                     request(express)
                         .get('/api/alunos')
                         .set('Accept', 'application/json')
                         .expect('Content-Type', /json/)
                         .expect(200)
-                        .expect(function(res) {
+                        .expect(function (res) {
                             expect(res.body)
                                 .to.be.an('array')
                                 .and.have.length(1);
@@ -104,19 +104,19 @@ describe('API Alunos', function () {
                 .catch(done);
         });
     });
-    
-    describe('Validação', function() {
+
+    describe('Validação', function () {
         it('Retornar erro de validação quando o prontuário possuir um formato incorreto.',
-            function(done) {
+            function (done) {
                 var dadosAluno = criarObjetoAluno();
                 dadosAluno.prontuario = '4651234';
-                
+
                 apiUtil.criarJsonPost('/api/alunos', dadosAluno, 400)
                     .expect(apiUtil.verificarErroApi('ErroValidacao'))
                     .end(done);
             }
         );
-        
+
         it('Retornar erro de chave quando o prontuário for duplicado.',
             function (done) {
                 var dadosAluno = criarObjetoAluno();
@@ -129,7 +129,7 @@ describe('API Alunos', function () {
                     });
             }
         );
-        
+
         it('Retornar erro de validação quando os campos não nulos não forem enviados.',
             function (done) {
                 var alunoEmBranco = {};
@@ -139,7 +139,7 @@ describe('API Alunos', function () {
                     .end(done);
             }
         );
-        
+
         it('Retornar erro de validação quando o nome ou sobrenome forem muito pequenos.',
             function (done) {
                 var dadosAluno = criarObjetoAluno();
@@ -151,7 +151,7 @@ describe('API Alunos', function () {
                     .end(done);
             }
         );
-        
+
         it('Retornar erro de validação quando o e-mail possuir um formato incorreto.',
             function (done) {
                 var dadosAluno = criarObjetoAluno();

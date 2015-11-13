@@ -22,14 +22,14 @@ function verificarNovaTurmaValida(res) {
 }
 
 describe('API Turma', function () {
-    
+
     beforeEach(function (done) {
-        Turma.destroy({truncate:true})
+        Turma.destroy({truncate: true})
             .finally(done);
     });
-    
-    describe('Métodos CRUD', function() {
-        it('Nova Turma', function(done) {
+
+    describe('Métodos CRUD', function () {
+        it('Nova Turma', function (done) {
             request(express)
                 .post('/api/turmas')
                 .send(criarObjetoTurma())
@@ -40,9 +40,9 @@ describe('API Turma', function () {
                 .end(done);
         });
 
-        it('Exibir Turma', function(done) {
+        it('Exibir Turma', function (done) {
             Turma.create(criarObjetoTurma())
-                .then(function(turma) {
+                .then(function (turma) {
                     request(express)
                         .get('/api/turmas/' + turma.get('id'))
                         .set('Accept', 'application/json')
@@ -53,10 +53,10 @@ describe('API Turma', function () {
                 })
                 .catch(done);
         });
-        
-        it('Editar Turma', function(done) {
+
+        it('Editar Turma', function (done) {
             Turma.create(criarObjetoTurma())
-                .then(function(turma) {
+                .then(function (turma) {
                     request(express)
                         .put('/api/turmas/' + turma.get('id'))
                         .send({semestre: '1'})
@@ -64,7 +64,7 @@ describe('API Turma', function () {
                         .expect('Content-Type', /json/)
                         .expect(200)
                         .expect(verificarTurmaValida)
-                        .expect(function(res) {
+                        .expect(function (res) {
                             expect(res.body.semestre)
                                 .to.be.equal('1');
                         })
@@ -72,16 +72,16 @@ describe('API Turma', function () {
                 })
                 .catch(done);
         });
-        
-        it('Excluir Turma', function(done) {
+
+        it('Excluir Turma', function (done) {
             Turma.create(criarObjetoTurma())
-                .then(function(turma) {
+                .then(function (turma) {
                     request(express)
                         .delete('/api/turmas/' + turma.get('id'))
                         .set('Accept', 'application/json')
                         .expect('Content-Type', /json/)
                         .expect(200)
-                        .expect(function(res) {
+                        .expect(function (res) {
                             expect(res.body)
                                 .to.be.true;
                         })
@@ -89,16 +89,16 @@ describe('API Turma', function () {
                 })
                 .catch(done);
         });
-        
-        it('Listar Turmas', function(done) {
+
+        it('Listar Turmas', function (done) {
             Turma.create(criarObjetoTurma())
-                .then(function(turma) {
+                .then(function (turma) {
                     request(express)
                         .get('/api/turmas')
                         .set('Accept', 'application/json')
                         .expect('Content-Type', /json/)
                         .expect(200)
-                        .expect(function(res) {
+                        .expect(function (res) {
                             expect(res.body)
                                 .to.be.an('array')
                                 .and.have.length(1);
@@ -108,43 +108,42 @@ describe('API Turma', function () {
                 .catch(done);
         });
     });
-    
-    describe('Validação', function() {
+
+    describe('Validação', function () {
         it('Retornar erro de validação quando a sigla possuir um formato incorreto.',
-                function (done) {
-                    var dadosTurma = criarObjetoTurma();
-                    dadosTurma.sigla = 'ADS-5-2dsdsd015-2';
+            function (done) {
+                var dadosTurma = criarObjetoTurma();
+                dadosTurma.sigla = 'ADS-5-2dsdsd015-2';
 
-                    apiUtil.criarJsonPost('/api/turmas', dadosTurma, 400)
-                        .expect(apiUtil.verificarErroApi('ErroValidacao'))
-                        .end(done);
-                }
-            );
-        
+                apiUtil.criarJsonPost('/api/turmas', dadosTurma, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                    .end(done);
+            }
+        );
+
         it('Retornar erro de validação quando o ano possuir um formato incorreto.',
-                function (done) {
-                    var dadosTurma = criarObjetoTurma();
-                    dadosTurma.ano = '20s15';
+            function (done) {
+                var dadosTurma = criarObjetoTurma();
+                dadosTurma.ano = '20s15';
 
-                    apiUtil.criarJsonPost('/api/turmas', dadosTurma, 400)
-                        .expect(apiUtil.verificarErroApi('ErroValidacao'))
-                        .end(done);
-                }
-            );
+                apiUtil.criarJsonPost('/api/turmas', dadosTurma, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                    .end(done);
+            }
+        );
         it('Retornar erro de validação quando o semestre possuir um formato incorreto.',
-                function (done) {
-                    var dadosTurma = criarObjetoTurma();
-                    dadosTurma.semestre = '20a';
+            function (done) {
+                var dadosTurma = criarObjetoTurma();
+                dadosTurma.semestre = '20a';
 
-                    apiUtil.criarJsonPost('/api/turmas', dadosTurma, 400)
-                        .expect(apiUtil.verificarErroApi('ErroValidacao'))
-                        .end(done);
-                }
-            );
-    
-    
+                apiUtil.criarJsonPost('/api/turmas', dadosTurma, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                    .end(done);
+            }
+        );
+
+
     });
-    
-    
+
 
 });

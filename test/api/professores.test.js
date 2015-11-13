@@ -23,8 +23,8 @@ describe('API Professores', function () {
             .finally(done);
     });
 
-    describe('Métodos CRUD', function() {
-        it('Novo Professor', function(done) {
+    describe('Métodos CRUD', function () {
+        it('Novo Professor', function (done) {
             request(express)
                 .post('/api/professores')
                 .send(criarObjetoProfessor())
@@ -35,9 +35,9 @@ describe('API Professores', function () {
                 .end(done);
         });
 
-        it('Exibir Professor', function(done) {
+        it('Exibir Professor', function (done) {
             Professor.create(criarObjetoProfessor())
-                .then(function(professor) {
+                .then(function (professor) {
                     request(express)
                         .get('/api/professores/' + professor.get('id'))
                         .set('Accept', 'application/json')
@@ -49,9 +49,9 @@ describe('API Professores', function () {
                 .catch(done);
         });
 
-        it('Editar Professor', function(done) {
-             Professor.create(criarObjetoProfessor())
-                .then(function(professor) {
+        it('Editar Professor', function (done) {
+            Professor.create(criarObjetoProfessor())
+                .then(function (professor) {
                     request(express)
                         .put('/api/professores/' + professor.get('id'))
                         .send({email: 'outro@foo.bar'})
@@ -59,7 +59,7 @@ describe('API Professores', function () {
                         .expect('Content-Type', /json/)
                         .expect(200)
                         .expect(verificarProfessorValido)
-                        .expect(function(res) {
+                        .expect(function (res) {
                             expect(res.body.email)
                                 .to.be.equal('outro@foo.bar');
                         })
@@ -68,15 +68,15 @@ describe('API Professores', function () {
                 .catch(done);
         });
 
-        it('Excluir Professor', function(done) {
+        it('Excluir Professor', function (done) {
             Professor.create(criarObjetoProfessor())
-                .then(function(professor) {
+                .then(function (professor) {
                     request(express)
                         .delete('/api/professores/' + professor.get('id'))
                         .set('Accept', 'application/json')
                         .expect('Content-Type', /json/)
                         .expect(200)
-                        .expect(function(res) {
+                        .expect(function (res) {
                             expect(res.body)
                                 .to.be.true;
                         })
@@ -85,15 +85,15 @@ describe('API Professores', function () {
                 .catch(done);
         });
 
-        it('Listar Professores', function(done) {
+        it('Listar Professores', function (done) {
             Professor.create(criarObjetoProfessor())
-                .then(function(professor) {
+                .then(function (professor) {
                     request(express)
                         .get('/api/professores')
                         .set('Accept', 'application/json')
                         .expect('Content-Type', /json/)
                         .expect(200)
-                        .expect(function(res) {
+                        .expect(function (res) {
                             expect(res.body)
                                 .to.be.an('array')
                                 .and.have.length(1);
@@ -104,7 +104,7 @@ describe('API Professores', function () {
         });
     });
 
-    describe('Validação', function() {
+    describe('Validação', function () {
         it('Retornar erro de validação quando o prontuário possuir um formato incorreto.',
             function (done) {
                 var dadosProfessor = criarObjetoProfessor();
