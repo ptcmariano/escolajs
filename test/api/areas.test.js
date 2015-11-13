@@ -102,6 +102,7 @@ describe('API Area', function () {
     });
     
     describe('Validação', function() {
+
     	 it('Retornar erro de validação quando o nome forem muito pequenos.',
                  function (done) {
                      var dadosArea = criarObjetoArea();
@@ -133,6 +134,7 @@ describe('API Area', function () {
     	                    .end(done);
     	            }
     	        );
+
     });
 
 });
