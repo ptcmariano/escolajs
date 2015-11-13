@@ -100,5 +100,39 @@ describe('API Area', function () {
                 .catch(done);
         });
     });
+    
+    describe('Validação', function() {
+    	 it('Retornar erro de validação quando o nome forem muito pequenos.',
+                 function (done) {
+                     var dadosArea = criarObjetoArea();
+                     dadosArea.area = 'da';
+                     
+                     apiUtil.criarJsonPost('/api/areas', dadosArea, 400)
+                         .expect(apiUtil.verificarErroApi('ErroValidacao', 1))
+                         .end(done);
+                 }
+             );
+    	 it('Retornar erro de chave quando a area for duplicada.',
+    	            function (done) {
+    	                var dadosArea = criarObjetoArea();
+    	                apiUtil.criarJsonPost('/api/areas', dadosArea, 200)
+    	                    .end(function (err, res) {
+    	                        expect(err).to.be.equals(null);
+    	                        apiUtil.criarJsonPost('/api/areas', dadosArea, 400)
+    	                            .expect(apiUtil.verificarErroApi('ErroChaveUnica'))
+    	                            .end(done);
+    	                    });
+    	            }
+    	        );
+    	 it('Retornar erro de validação quando os campos não nulos não forem enviados.',
+    	            function (done) {
+    	                var areaEmBranco = {};
+
+    	                apiUtil.criarJsonPost('/api/areas', areaEmBranco, 400)
+    	                    .expect(apiUtil.verificarErroApi('ErroValidacao', 1))
+    	                    .end(done);
+    	            }
+    	        );
+    });
 
 });
