@@ -108,5 +108,43 @@ describe('API Turma', function () {
                 .catch(done);
         });
     });
+    
+    describe('Validação', function() {
+        it('Retornar erro de validação quando a sigla possuir um formato incorreto.',
+                function (done) {
+                    var dadosTurma = criarObjetoTurma();
+                    dadosTurma.sigla = 'ADS-5-2dsdsd015-2';
+
+                    apiUtil.criarJsonPost('/api/turmas', dadosTurma, 400)
+                        .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                        .end(done);
+                }
+            );
+        
+        it('Retornar erro de validação quando o ano possuir um formato incorreto.',
+                function (done) {
+                    var dadosTurma = criarObjetoTurma();
+                    dadosTurma.ano = '20s15';
+
+                    apiUtil.criarJsonPost('/api/turmas', dadosTurma, 400)
+                        .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                        .end(done);
+                }
+            );
+        it('Retornar erro de validação quando o semestre possuir um formato incorreto.',
+                function (done) {
+                    var dadosTurma = criarObjetoTurma();
+                    dadosTurma.semestre = '20a';
+
+                    apiUtil.criarJsonPost('/api/turmas', dadosTurma, 400)
+                        .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                        .end(done);
+                }
+            );
+    
+    
+    });
+    
+    
 
 });
