@@ -7,6 +7,7 @@ router.use('/turmas', require('./turmasRoute'));
 router.use('/cursos', require('./cursosRoute'));
 router.use('/areas', require('./areasRoute'));
 router.use('/disciplinas', require('./disciplinasRoute'));
+router.use('/disciplinaOfertada', require('./disciplinaOfertadaRoute'));
 
 router.use(require('../../components/apiErrorParser').sequelizeError);
 
