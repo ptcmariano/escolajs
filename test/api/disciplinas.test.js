@@ -103,5 +103,48 @@ describe('API Disciplinas', function () {
                 .catch(done);
         });
     });
+    
+    describe('Validação', function() {
+        it('Retornar erro de validação quando os campos não nulos não forem enviados.',
+            function (done) {
+                var disciplinaEmBranco = {};
+
+                apiUtil.criarJsonPost('/api/disciplinas', disciplinaEmBranco, 400)
+                    .expect(apiUtil.verificarErroApi('ErroValidacao', 2))
+                    .end(done);
+            }
+        );
+                
+        it('Retornar erro caso o curso não possua entre 3 e 100 caracteres.', function(done) {
+            var dadosDisciplina = criarObjetoDisciplina();
+            dadosDisciplina.disciplina = 'ca';
+            
+            apiUtil.criarJsonPost('/api/disciplinas', dadosDisciplina, 400)
+                .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                .end(done);
+        });
+        
+        it('Retornar erro caso a sigla do curso não possua entre 2 e 20 caracteres.', function(done) {
+            var dadosDisciplina = criarObjetoDisciplina();
+            dadosDisciplina.sigla = 'c';
+            
+            apiUtil.criarJsonPost('/api/disciplinas', dadosDisciplina, 400)
+                .expect(apiUtil.verificarErroApi('ErroValidacao'))
+                .end(done);
+        });
+        
+        it('Retornar erro de chave quando o disciplina ou sigla forem duplicado.',
+            function (done) {
+                var dadosDisciplina = criarObjetoDisciplina();
+                apiUtil.criarJsonPost('/api/disciplinas', dadosDisciplina, 200)
+                    .end(function (err, res) {
+                        expect(err).to.be.equals(null);
+                        apiUtil.criarJsonPost('/api/disciplinas', dadosDisciplina, 400)
+                            .expect(apiUtil.verificarErroApi('ErroChaveUnica'))
+                            .end(done);
+                    });
+            }
+        );         
+    });    
 
 }); 
